@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "MVVM MVI Sample"
 include(":app")
+include(":domain")
+include(":data")
