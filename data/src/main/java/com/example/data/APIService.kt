@@ -7,13 +7,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface APIService {
-    @GET("https://openlibrary.org/search/authors.json")
+    @GET("/search/authors.json")
     suspend fun authors(
         @Query("q") q: String,
-        @Query("limit") maxResults: Int ?= 10
+        @Query("limit") maxResults: Int
     ) : AuthorItem?
 
-    @GET("https://openlibrary.org/authors/{authorId}.json")
+    @GET("/authors/{authorId}.json")
     suspend fun author(
         @Path("authorId") authorId: String
     ) : AuthorDetailsItem?

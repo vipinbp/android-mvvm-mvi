@@ -8,7 +8,7 @@ data class Doc(
     val key: String,
     val name: String,
     @SerializedName("top_subjects")
-    val topSubjects: List<String>,
+    val topSubjects: List<String>?,
     @SerializedName("top_work")
     val topWork: String,
     val type: String,

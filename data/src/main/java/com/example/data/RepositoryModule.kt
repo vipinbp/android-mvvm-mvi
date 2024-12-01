@@ -1,6 +1,6 @@
 package com.example.data
 
-import com.example.domain.Repository
+import com.example.domain.AuthorsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -11,6 +11,6 @@ import dagger.hilt.android.components.ViewModelComponent
 abstract class RepositoryModule {
     @Binds
     abstract fun bindRepository(
-        repository: RepositoryImpl
-    ): Repository
+        repository: AuthorsRepositoryImpl
+    ): AuthorsRepository
 }

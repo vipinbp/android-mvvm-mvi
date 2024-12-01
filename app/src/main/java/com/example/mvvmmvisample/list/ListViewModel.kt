@@ -3,23 +3,29 @@ package com.example.mvvmmvisample.list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecase.GetAuthorsUsecase
+import com.example.domain.models.AuthorList
+import com.example.domain.usecase.GetAuthorsUseCase
+import com.example.mvvmmvisample.common.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListViewModel @Inject constructor(val getAuthorsUsecase: GetAuthorsUsecase): ViewModel() {
+class ListViewModel @Inject constructor(private val getAuthorsUseCase: GetAuthorsUseCase) :
+    ViewModel() {
 
     private val _uiState = MutableStateFlow(ListUiState())
     val uiState: StateFlow<ListUiState> = _uiState.asStateFlow()
+
+    private val _uiEvent = MutableSharedFlow<ListUiEvent>()
+    val uiEvent: SharedFlow<ListUiEvent> = _uiEvent.asSharedFlow()
 
     init {
         fetchAuthors()
@@ -27,26 +33,42 @@ class ListViewModel @Inject constructor(val getAuthorsUsecase: GetAuthorsUsecase
 
     private fun fetchAuthors() {
         viewModelScope.launch {
-            getAuthorsUsecase("jk")
-                .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    // handle exception
-                    Log.d("ListViewModel", "fetchAuthors: $e")
+
+            _uiState.update {
+                it.copy(state = ScreenState.Loading)
+            }
+
+            when (val result = getAuthorsUseCase(query = "jk")) {
+                is AuthorList.Error -> _uiState.update {
+                    it.copy(state = ScreenState.Error(result.message))
                 }
-                .collect { authors ->
-                    // list of users from the network
-                    authors?.let {
-                        _uiState.update {
-                            it.copy(listUiItem = authors.map { author ->
-                                ListUiItem(
-                                    author.name,
-                                    author.name,
-                                    author.name
-                                )
-                            })
-                        }
-                    }
+
+                is AuthorList.Success -> _uiState.update {
+                    it.copy(
+                        listUiItem = result.authors.map { author ->
+                            ListUiItem(
+                                author.authorId,
+                                author.name,
+                                author.topSubjects,
+                                author.profileImage
+                            )
+                        },
+                        state = ScreenState.Success
+                    )
                 }
+            }
+        }
+    }
+
+    fun onEvent(event: ListEvent) {
+        when (event) {
+            is ListEvent.GoToDetails -> {
+                Log.d("ListViewModel", "onEvent: ${event.authorId}")
+                //other viewmodel tasks to execute
+                viewModelScope.launch {
+                    _uiEvent.emit(ListUiEvent.GoToDetails(event.authorId))
+                }
+            }
         }
     }
 }

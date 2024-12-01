@@ -1,48 +1,53 @@
 package com.example.mvvmmvisample.details
 
-import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.AuthorDetails
 import com.example.domain.usecase.GetAuthorDetailsUsecase
+import com.example.mvvmmvisample.common.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(val getAuthorDetailsUsecase: GetAuthorDetailsUsecase): ViewModel() {
+class DetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    val getAuthorDetailsUsecase: GetAuthorDetailsUsecase
+) : ViewModel() {
+    val authorId: String = checkNotNull(savedStateHandle["authorId"])
     private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
+
     init {
-        fetchAuthorDetails("OL23919A")
+        fetchAuthorDetails(authorId)
     }
 
     private fun fetchAuthorDetails(authorId: String) {
         viewModelScope.launch {
-            getAuthorDetailsUsecase(authorId)
-                .flowOn(Dispatchers.IO)
-                .catch { e ->
-                    // handle exception
-                    Log.d("DetailsViewModel", "fetchAuthorDetails: $e")
+
+            _uiState.update {
+                it.copy(state = ScreenState.Loading)
+            }
+
+            when (val result = getAuthorDetailsUsecase(authorId = authorId)) {
+                is AuthorDetails.Error -> _uiState.update {
+                    it.copy(state = ScreenState.Error(result.message))
                 }
-                .collect { author ->
-                    // list of users from the network
-                    author?.let {
-                        _uiState.update {
-                            it.copy(
-                                title = author.name,
-                                description = author.name,
-                                imageUrl = author.name
-                            )
-                        }
-                    }
+
+                is AuthorDetails.Success -> _uiState.update {
+                    it.copy(
+                        title = result.authorDetails.name,
+                        description = result.authorDetails.description,
+                        imageUrl = result.authorDetails.profileImage,
+                        state = ScreenState.Success
+                    )
                 }
+            }
         }
     }
 }

@@ -1,3 +1,8 @@
 package com.example.mvvmmvisample.list
 
-data class ListUiState(val loading: Boolean = false, val listUiItem: List<ListUiItem> = emptyList<ListUiItem>())
+import com.example.mvvmmvisample.common.ScreenState
+
+data class ListUiState(
+    val state: ScreenState = ScreenState.Loading,
+    val listUiItem: List<ListUiItem> = emptyList<ListUiItem>()
+)

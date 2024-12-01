@@ -19,19 +19,24 @@ fun NavigationGraph() {
         composable<ListScreenRoute> {
             val viewModel: ListViewModel = hiltViewModel()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-            ListScreen(uiState.value){
-                navController.navigate(DetailsScreenRoute)
+            ListScreen(
+                uiState = uiState.value,
+                onEvent = viewModel::onEvent,
+                uiEvent = viewModel.uiEvent,
+            ) {
+                navController.navigate(DetailsScreenRoute(it))
             }
         }
         composable<DetailsScreenRoute> {
             val viewModel: DetailsViewModel = hiltViewModel()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-            DetailsScreen(uiState.value)
+            DetailsScreen(uiState.value, navController)
         }
     }
 }
 
 @Serializable
 data object ListScreenRoute
+
 @Serializable
-data object DetailsScreenRoute
+data class DetailsScreenRoute(val authorId: String)
