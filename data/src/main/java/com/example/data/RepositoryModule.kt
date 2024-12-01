@@ -1,21 +1,16 @@
 package com.example.data
 
 import com.example.domain.Repository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.components.ViewModelComponent
 
 @Module
-@InstallIn(SingletonComponent::class)
-class RepositoryModule {
-
-    @Provides
-    @Singleton
-    fun provideRepository(
-        apiService: APIService
-    ): Repository {
-        return RepositoryImpl(apiService)
-    }
+@InstallIn(ViewModelComponent::class)
+abstract class RepositoryModule {
+    @Binds
+    abstract fun bindRepository(
+        repository: RepositoryImpl
+    ): Repository
 }

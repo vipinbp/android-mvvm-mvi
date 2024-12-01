@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class RepositoryImpl (val aPIService: APIService) : Repository {
+class RepositoryImpl @Inject constructor(val aPIService: APIService) : Repository {
 
     override fun authors(
         query: String,
