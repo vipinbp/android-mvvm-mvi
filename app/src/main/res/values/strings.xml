@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">MVVM MVI Sample</string>
+    <string name="author_details">Author Details</string>
+    <string name="back">Back</string>
+    <string name="authors">Authors</string>
 </resources>

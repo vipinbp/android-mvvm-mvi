@@ -12,6 +12,16 @@ jetbrainsKotlinJvm = "2.0.0"
 appcompat = "1.6.1"
 material = "1.10.0"
 hilt = "2.52"
+navigation_compose = "2.8.4"
+hilt_compose_navigation = "1.2.0"
+coil_compose = "2.2.2"
+kotlinx_serialization = "1.6.2"
+mockk_android = "1.13.5"
+kotlinx_coroutines_test = "1.7.1"
+androidx_core_test = "2.2.0"
+turbine = "0.12.1"
+retrofit = "2.9.0"
+javax = "1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +42,19 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation_compose" }
+hilt-compose-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt_compose_navigation" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil_compose" }
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx_serialization" }
+android-mockk = { group = "io.mockk", name = "mockk-android", version.ref = "mockk_android" }
+io-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk_android" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx_coroutines_test" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx_coroutines_test" }
+androidx-core-test = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidx_core_test" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -39,4 +62,6 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-kapt = { id = "kotlin-kapt" }
 

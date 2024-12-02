@@ -1,6 +1,5 @@
 package com.example.mvvmmvisample.list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.AuthorList
@@ -28,17 +27,17 @@ class ListViewModel @Inject constructor(private val getAuthorsUseCase: GetAuthor
     val uiEvent: SharedFlow<ListUiEvent> = _uiEvent.asSharedFlow()
 
     init {
-        fetchAuthors()
+        fetchAuthors("jk")
     }
 
-    private fun fetchAuthors() {
+    private fun fetchAuthors(query : String) {
         viewModelScope.launch {
 
             _uiState.update {
                 it.copy(state = ScreenState.Loading)
             }
 
-            when (val result = getAuthorsUseCase(query = "jk")) {
+            when (val result = getAuthorsUseCase(query = query)) {
                 is AuthorList.Error -> _uiState.update {
                     it.copy(state = ScreenState.Error(result.message))
                 }
@@ -63,7 +62,6 @@ class ListViewModel @Inject constructor(private val getAuthorsUseCase: GetAuthor
     fun onEvent(event: ListEvent) {
         when (event) {
             is ListEvent.GoToDetails -> {
-                Log.d("ListViewModel", "onEvent: ${event.authorId}")
                 //other viewmodel tasks to execute
                 viewModelScope.launch {
                     _uiEvent.emit(ListUiEvent.GoToDetails(event.authorId))

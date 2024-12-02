@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt.gradle)
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
 }
 
@@ -56,15 +56,19 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material3)
     implementation(libs.hilt.android)
-//    implementation(libs.hilt.android.compiler)
     kapt(libs.hilt.android.compiler)
 
-    implementation("androidx.navigation:navigation-compose:2.8.4")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("io.coil-kt:coil-compose:2.2.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.hilt.compose.navigation)
+    implementation(libs.coil.compose)
+    implementation(libs.kotlinx.serialization)
 
     testImplementation(libs.junit)
+    testImplementation(libs.android.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.core.test)
+    testImplementation(libs.turbine)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

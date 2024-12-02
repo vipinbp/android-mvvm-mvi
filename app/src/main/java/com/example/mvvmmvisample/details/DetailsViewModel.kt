@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.AuthorDetails
-import com.example.domain.usecase.GetAuthorDetailsUsecase
+import com.example.domain.usecase.GetAuthorDetailsUseCase
 import com.example.mvvmmvisample.common.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    val getAuthorDetailsUsecase: GetAuthorDetailsUsecase
+    val getAuthorDetailsUsecase: GetAuthorDetailsUseCase
 ) : ViewModel() {
     val authorId: String = checkNotNull(savedStateHandle["authorId"])
     private val _uiState = MutableStateFlow(DetailsUiState())

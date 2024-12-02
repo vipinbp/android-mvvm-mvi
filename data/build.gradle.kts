@@ -1,9 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.gradle)
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
-
 }
 
 android {
@@ -38,19 +37,17 @@ android {
 dependencies {
     implementation(project(":domain"))
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-//    implementation(libs.androidx.core.ktx)
-//    implementation(libs.androidx.appcompat)
-//    implementation(libs.material)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
     implementation(libs.hilt.android)
-////    implementation(libs.hilt.android.compiler)
     kapt(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.android.mockk)
 }
 
 // Allow references to generated code
